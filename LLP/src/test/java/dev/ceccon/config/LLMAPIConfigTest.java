@@ -66,4 +66,16 @@ class LLMAPIConfigTest {
         assertEquals(temperature, temperatureOnConfig);
     }
 
+    @Test
+    void getAndSetStreaming() {
+        boolean streaming = true;
+
+        LLMAPIConfig config = new LLMAPIConfig();
+        config.setStreaming(streaming);
+
+        boolean streamingOnConfig = config.isStreaming();
+
+        assertEquals(streaming, streamingOnConfig);
+    }
+
 }

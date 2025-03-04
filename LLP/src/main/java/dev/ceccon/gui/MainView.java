@@ -1,5 +1,6 @@
 package dev.ceccon.gui;
 
+import dev.ceccon.gui.views.ConversationView;
 import dev.ceccon.gui.views.LanguageSelectionView;
 import dev.ceccon.gui.views.TitleView;
 
@@ -24,6 +25,7 @@ public class MainView extends JFrame {
     private void buildView() {
         TitleView titleView = new TitleView();
         LanguageSelectionView languageSelectionView = new LanguageSelectionView();
+        ConversationView conversationView = new ConversationView();
 
         JPanel mainPanel = new JPanel();
         BoxLayout mpLayout = new BoxLayout(mainPanel, BoxLayout.Y_AXIS);
@@ -33,6 +35,9 @@ public class MainView extends JFrame {
         mainPanel.add(new JSeparator());
 
         mainPanel.add(languageSelectionView);
+        mainPanel.add(new JSeparator());
+
+        mainPanel.add(conversationView);
         mainPanel.add(new JSeparator());
 
         JScrollPane spMain = new JScrollPane(mainPanel);

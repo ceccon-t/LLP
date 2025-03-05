@@ -14,7 +14,7 @@ public class MainView extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         setSize(ViewConfig.ROOT_WIDTH, ViewConfig.ROOT_HEIGHT);
-//        setExtendedState(getExtendedState() | MAXIMIZED_BOTH);
+        setExtendedState(getExtendedState() | MAXIMIZED_BOTH);
         setLayout(new BorderLayout());
 
         buildView();

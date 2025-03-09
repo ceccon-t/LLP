@@ -2,6 +2,9 @@ package dev.ceccon.practice;
 
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
+import java.net.URISyntaxException;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class PracticeSceneTest {
@@ -74,5 +77,27 @@ class PracticeSceneTest {
         scene.setHumanCharacterImagePath(path);
 
         assertEquals(path, scene.getHumanCharacterImagePath());
+    }
+
+    @Test
+    void loadFromFile() throws URISyntaxException {
+        File file = new File(getClass().getClassLoader().getResource("scenes/default.practice").toURI());
+        String scenario = "In the middle of a modern city, the robot AIBot is waiting for a bus when another robot, User, approaches it.";
+        String aiCharacterName = "AIBot";
+        String aiCharacterBio = "AIBot is a friendly and talkative robot.";
+        String aiCharacterImagePath = "images/robot.jpg";
+        String humanCharacterName = "User";
+        String humanCharacterBio = "User is a robot who is traveling the world, and has just arrived in this country.";
+        String humanCharacterImagePath = "images/robot2.jpg";
+
+        PracticeScene scene = PracticeScene.fromFile(file);
+
+        assertEquals(scenario, scene.getScenario());
+        assertEquals(aiCharacterName, scene.getAiCharacterName());
+        assertEquals(aiCharacterBio, scene.getAiCharacterBio());
+        assertEquals(aiCharacterImagePath, scene.getAiCharacterImagePath());
+        assertEquals(humanCharacterName, scene.getHumanCharacterName());
+        assertEquals(humanCharacterBio, scene.getHumanCharacterBio());
+        assertEquals(humanCharacterImagePath, scene.getHumanCharacterImagePath());
     }
 }

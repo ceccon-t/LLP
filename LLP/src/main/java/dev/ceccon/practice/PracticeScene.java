@@ -1,5 +1,12 @@
 package dev.ceccon.practice;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+
 public class PracticeScene {
 
     private String scenario;
@@ -9,6 +16,21 @@ public class PracticeScene {
     private String humanCharacterName;
     private String humanCharacterBio;
     private String humanCharacterImagePath;
+
+    public static PracticeScene fromFile(File file) {
+        ObjectMapper mapper = new ObjectMapper();
+        PracticeScene loadedScene;
+
+        try {
+            String fileContent = Files.readString(Path.of(file.getPath()));
+            loadedScene = mapper.readValue(fileContent, PracticeScene.class);
+        } catch (IOException e) {
+            System.out.println("Could not load file, please check if file exists and follows expected format.");
+            throw new RuntimeException(e);
+        }
+
+        return loadedScene;
+    }
 
     public String getScenario() {
         return scenario;

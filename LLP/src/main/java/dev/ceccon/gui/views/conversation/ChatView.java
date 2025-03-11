@@ -1,5 +1,8 @@
 package dev.ceccon.gui.views.conversation;
 
+import dev.ceccon.config.PracticeSessionConfig;
+import dev.ceccon.practice.PracticeSession;
+
 import javax.swing.*;
 
 public class ChatView extends JPanel {
@@ -30,6 +33,9 @@ public class ChatView extends JPanel {
     }
 
     private void initializeChatViewContent() {
-        taChat.setText(CHAT_VIEW_PREFIX + "Chat history.");
+        PracticeSessionConfig sessionConfig = PracticeSessionConfig.getInstance();
+        PracticeSession practiceSession = sessionConfig.getPracticeSession();
+
+        taChat.setText(CHAT_VIEW_PREFIX + practiceSession.getScenario());
     }
 }

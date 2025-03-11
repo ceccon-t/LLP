@@ -1,6 +1,9 @@
 package dev.ceccon.gui.views.conversation;
 
+import dev.ceccon.config.PracticeSessionConfig;
 import dev.ceccon.practice.CharacterType;
+import dev.ceccon.practice.PracticeCharacter;
+import dev.ceccon.practice.PracticeSession;
 
 import javax.swing.*;
 import java.awt.*;
@@ -20,9 +23,11 @@ public class CharacterView extends JPanel {
     private JTextArea taCharacterDescription = new JTextArea(CHARACTER_DESCRIPTION_ROWS, CHARACTER_DESCRIPTION_COLUMNS);;
 
     private CharacterType characterType;
+    private PracticeCharacter character;
 
     public CharacterView(CharacterType characterType) {
         this.characterType = characterType;
+        character = fetchCharacter();
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setPreferredSize(new Dimension(CHARACTER_VIEW_WIDTH, CHARACTER_VIEW_HEIGHT));
@@ -47,7 +52,7 @@ public class CharacterView extends JPanel {
     }
 
     private void populateImageViewsContents() {
-        ImageIcon icon = new ImageIcon(getClass().getClassLoader().getResource("images/robot.jpg"));
+        ImageIcon icon = new ImageIcon(character.getImage());
         Image image = icon.getImage();
         Image scaledImage = image.getScaledInstance(CHARACTER_AVATAR_IMAGE_WIDTH, CHARACTER_AVATAR_IMAGE_HEIGHT, Image.SCALE_SMOOTH);
         ImageIcon scaledIcon = new ImageIcon(scaledImage);
@@ -60,11 +65,18 @@ public class CharacterView extends JPanel {
     }
 
     private void populateViewsContent() {
-        String characterDescription = characterType == CharacterType.AI ?
-                "AI Character" :
-                "Human Character";
+        String characterDescription = character.getDescription();
 
         taCharacterDescription.setText(characterDescription);
         populateImageViewsContents();
+    }
+
+    private PracticeCharacter fetchCharacter() {
+        PracticeSessionConfig sessionConfig = PracticeSessionConfig.getInstance();
+        PracticeSession practiceSession = sessionConfig.getPracticeSession();
+
+        return characterType == CharacterType.AI ?
+                practiceSession.getAiCharacter() :
+                practiceSession.getHumanCharacter();
     }
 }

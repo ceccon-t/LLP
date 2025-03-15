@@ -10,6 +10,7 @@ public class ChatView extends JPanel {
 
     JTextArea taChat;
     JTextArea taNextMessage;
+    JButton btnSendMessage;
 
     public ChatView() {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -26,9 +27,14 @@ public class ChatView extends JPanel {
         taNextMessage.setWrapStyleWord(true);
         JScrollPane spNextMessage = new JScrollPane(taNextMessage);
 
+        btnSendMessage = new JButton("Send");
+        btnSendMessage.addActionListener(c -> {
+            sendMessage();
+        });
+
         add(spChat);
         add(spNextMessage);
-
+        add(btnSendMessage);
 
     }
 
@@ -37,5 +43,9 @@ public class ChatView extends JPanel {
         PracticeSession practiceSession = sessionConfig.getPracticeSession();
 
         taChat.setText(CHAT_VIEW_PREFIX + practiceSession.getScenario());
+    }
+
+    private void sendMessage() {
+
     }
 }

@@ -51,6 +51,8 @@ public class ChatView extends JPanel {
     private void sendMessage() {
         String userMessage = taNextMessage.getText().trim();
 
+        if (userMessage.isEmpty()) return;
+
         PracticeSession session = sessionConfig.getPracticeSession();
         String humanCharacterName = session.getHumanCharacter().getName();
 

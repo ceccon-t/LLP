@@ -1,10 +1,13 @@
 package dev.ceccon.practice;
 
+import dev.ceccon.conversation.Chat;
+
 public class PracticeSession {
 
     private String scenario;
     private PracticeCharacter aiCharacter;
     private PracticeCharacter humanCharacter;
+    private Chat chat;
 
     public PracticeSession(String scenario, PracticeCharacter aiCharacter, PracticeCharacter humanCharacter) {
         this.scenario = scenario;
@@ -34,5 +37,13 @@ public class PracticeSession {
 
     public void setHumanCharacter(PracticeCharacter humanCharacter) {
         this.humanCharacter = humanCharacter;
+    }
+
+    public Chat getChat() {
+        return chat;
+    }
+
+    public void setChat(Chat chat) {
+        this.chat = chat;
     }
 }

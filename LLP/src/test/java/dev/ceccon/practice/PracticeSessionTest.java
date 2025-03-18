@@ -1,5 +1,7 @@
 package dev.ceccon.practice;
 
+import dev.ceccon.conversation.Chat;
+import dev.ceccon.conversation.Message;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -55,6 +57,17 @@ class PracticeSessionTest {
         practiceSession.setHumanCharacter(newHumanCharacter);
 
         assertEquals(newHumanCharacter, practiceSession.getHumanCharacter());
+    }
+
+    @Test
+    void getAndSetChat() {
+        Chat chat = new Chat();
+        chat.addMessage(new Message("role", "content"));
+
+        PracticeSession practiceSession = simpleSession();
+        practiceSession.setChat(chat);
+
+        assertEquals(chat, practiceSession.getChat());
     }
 
 }

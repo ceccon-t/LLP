@@ -1,6 +1,9 @@
 package dev.ceccon.gui.views.conversation;
 
+import dev.ceccon.client.LLMSanitizer;
 import dev.ceccon.config.PracticeSessionConfig;
+import dev.ceccon.conversation.Chat;
+import dev.ceccon.conversation.Message;
 import dev.ceccon.practice.PracticeSession;
 
 import javax.swing.*;
@@ -57,6 +60,11 @@ public class ChatView extends JPanel {
         String humanCharacterName = session.getHumanCharacter().getName();
 
         taChat.append("\n----\n- " + humanCharacterName + ": " + userMessage + "\n");
+
+        Chat chat = session.getChat();
+        chat.addMessage(new Message("user", LLMSanitizer.sanitizeForChat(userMessage)));
+
+        System.out.println(chat);
 
         taNextMessage.setText("");
     }

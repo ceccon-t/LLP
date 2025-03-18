@@ -34,6 +34,19 @@ class PracticeSessionTest {
         assertEquals(0, chat.getMessages().size());
     }
 
+    @Test
+    void canConstructWithChat() {
+        String scenario = "Scenario";
+        PracticeCharacter aiCharacter = new PracticeCharacter("AI", "AI character", null);
+        PracticeCharacter humanCharacter = new PracticeCharacter("Human", "Human character", null);
+        Chat chat = new Chat();
+        chat.addMessage(new Message("role", "content"));
+
+        PracticeSession practiceSession = new PracticeSession(scenario, aiCharacter, humanCharacter, chat);
+
+        assertEquals(chat, practiceSession.getChat());
+    }
+
     private PracticeSession simpleSession() {
         String scenario = "Scenario";
         PracticeCharacter aiCharacter = new PracticeCharacter("AI", "AI character", null);

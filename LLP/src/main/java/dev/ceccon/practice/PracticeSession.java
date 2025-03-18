@@ -7,12 +7,17 @@ public class PracticeSession {
     private String scenario;
     private PracticeCharacter aiCharacter;
     private PracticeCharacter humanCharacter;
-    private Chat chat = new Chat();
+    private Chat chat;
 
     public PracticeSession(String scenario, PracticeCharacter aiCharacter, PracticeCharacter humanCharacter) {
+        this(scenario, aiCharacter, humanCharacter, new Chat());
+    }
+
+    public PracticeSession(String scenario, PracticeCharacter aiCharacter, PracticeCharacter humanCharacter, Chat chat) {
         this.scenario = scenario;
         this.aiCharacter = aiCharacter;
         this.humanCharacter = humanCharacter;
+        this.chat = chat;
     }
 
     public String getScenario() {

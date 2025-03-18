@@ -1,5 +1,8 @@
 package dev.ceccon.config;
 
+import dev.ceccon.client.LLMSanitizer;
+import dev.ceccon.conversation.Chat;
+import dev.ceccon.conversation.Message;
 import dev.ceccon.practice.Language;
 import dev.ceccon.practice.PracticeCharacter;
 import dev.ceccon.practice.PracticeScene;
@@ -70,7 +73,20 @@ public class PracticeSessionConfig {
         PracticeCharacter aiCharacter = new PracticeCharacter(defaultScene.getAiCharacterName(), defaultScene.getAiCharacterBio(), aiCharacterImageBytes);
         PracticeCharacter humanCharacter = new PracticeCharacter(defaultScene.getHumanCharacterName(), defaultScene.getHumanCharacterBio(), humanCharacterImageBytes);
 
-        return new PracticeSession(scenario, aiCharacter, humanCharacter);
+        Language defaultLanguage = Language.FRENCH;
+
+        String systemPrompt = new StringBuilder()
+                .append("This is a conversation between ").append(LLMSanitizer.sanitizeForChat(aiCharacter.getName()))
+                .append(" and ").append(LLMSanitizer.sanitizeForChat(humanCharacter.getName()))
+                .append(", for the purpose of practicing the ").append(defaultLanguage).append(" language.\n")
+                .append("The scenario is as follows: \n\n<scenario>\n").append(LLMSanitizer.sanitizeForChat(scenario)).append("\n</scenario>\n\n")
+                .append("The conversation should work as a normal roleplaying chat, but all content should be in ").append(defaultLanguage).append(".\n")
+                .toString();
+
+        Chat chat = new Chat();
+        chat.addMessage(new Message("system", systemPrompt));
+
+        return new PracticeSession(scenario, aiCharacter, humanCharacter, chat);
     }
 
     private static PracticeScene loadDefaultScene() {

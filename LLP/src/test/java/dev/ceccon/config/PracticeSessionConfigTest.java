@@ -1,5 +1,6 @@
 package dev.ceccon.config;
 
+import dev.ceccon.conversation.Chat;
 import dev.ceccon.practice.Language;
 import dev.ceccon.practice.PracticeSession;
 import org.junit.jupiter.api.Test;
@@ -31,6 +32,16 @@ class PracticeSessionConfigTest {
         assertEquals(defaultAiCharacterDescription, session.getAiCharacter().getDescription());
         assertEquals(defaultHumanCharacterName, session.getHumanCharacter().getName());
         assertEquals(defaultHumanCharacterDescription, session.getHumanCharacter().getDescription());
+    }
+
+    @Test
+    void initializesWithSystemInstruction() {
+        PracticeSessionConfig config = PracticeSessionConfig.getInstance();
+        PracticeSession session = config.getPracticeSession();
+        Chat chat = session.getChat();
+
+        assertEquals(1, chat.getMessages().size());
+        assertEquals("system", chat.getMessages().getFirst().role());
     }
 
     @Test

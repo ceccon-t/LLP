@@ -21,6 +21,19 @@ class PracticeSessionTest {
         assertEquals(humanCharacter, practiceSession.getHumanCharacter());
     }
 
+    @Test
+    void constructorWithScenarioAndCharactersStartsWithEmptyChat() {
+        String scenario = "Scenario";
+        PracticeCharacter aiCharacter = new PracticeCharacter("AI", "AI character", null);
+        PracticeCharacter humanCharacter = new PracticeCharacter("Human", "Human character", null);
+
+        PracticeSession practiceSession = new PracticeSession(scenario, aiCharacter, humanCharacter);
+
+        Chat chat = practiceSession.getChat();
+
+        assertEquals(0, chat.getMessages().size());
+    }
+
     private PracticeSession simpleSession() {
         String scenario = "Scenario";
         PracticeCharacter aiCharacter = new PracticeCharacter("AI", "AI character", null);

@@ -7,7 +7,7 @@ public class PracticeSession {
     private String scenario;
     private PracticeCharacter aiCharacter;
     private PracticeCharacter humanCharacter;
-    private Chat chat;
+    private Chat chat = new Chat();
 
     public PracticeSession(String scenario, PracticeCharacter aiCharacter, PracticeCharacter humanCharacter) {
         this.scenario = scenario;

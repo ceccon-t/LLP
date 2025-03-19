@@ -64,8 +64,6 @@ public class ChatView extends JPanel {
         Chat chat = session.getChat();
         chat.addMessage(new Message("user", LLMSanitizer.sanitizeForChat(userMessage)));
 
-        System.out.println(chat);
-
         taNextMessage.setText("");
     }
 }

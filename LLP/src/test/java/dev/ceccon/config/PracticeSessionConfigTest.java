@@ -45,6 +45,13 @@ class PracticeSessionConfigTest {
     }
 
     @Test
+    void initializesWithApiConfig() {
+        PracticeSessionConfig config = PracticeSessionConfig.getInstance();
+
+        assertNotNull(config.getLlmApiConfig());
+    }
+
+    @Test
     void getAndSetPracticedLanguage() {
         Language practicedLanguage = Language.GERMAN;
 
@@ -55,6 +62,17 @@ class PracticeSessionConfigTest {
         Language languageOnConfig = config.getPracticedLanguage();
 
         assertEquals(practicedLanguage, languageOnConfig);
+    }
+
+    @Test
+    void getAndSetAPIConfig() {
+        LLMAPIConfig llmapiConfig = new LLMAPIConfig();
+
+        PracticeSessionConfig config = PracticeSessionConfig.getInstance();
+
+        config.setLlmApiConfig(llmapiConfig);
+
+        assertEquals(llmapiConfig, config.getLlmApiConfig());
     }
 
 }

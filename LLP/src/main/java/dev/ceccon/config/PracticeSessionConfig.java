@@ -20,6 +20,9 @@ public class PracticeSessionConfig {
 
     private Language practicedLanguage = Language.FRENCH;
     private PracticeSession practiceSession;
+    private LLMAPIConfig llmApiConfig = new LLMAPIConfig();
+
+    private PracticeSessionConfig() {}
 
     public static PracticeSessionConfig getInstance() {
         synchronized (instanceLock) {
@@ -31,12 +34,12 @@ public class PracticeSessionConfig {
         return instance;
     }
 
-    public void setPracticedLanguage(Language language) {
-        practicedLanguage = language;
-    }
-
     public Language getPracticedLanguage() {
         return practicedLanguage;
+    }
+
+    public void setPracticedLanguage(Language language) {
+        practicedLanguage = language;
     }
 
     public PracticeSession getPracticeSession() {
@@ -45,6 +48,14 @@ public class PracticeSessionConfig {
 
     public void setPracticeSession(PracticeSession practiceSession) {
         this.practiceSession = practiceSession;
+    }
+
+    public LLMAPIConfig getLlmApiConfig() {
+        return llmApiConfig;
+    }
+
+    public void setLlmApiConfig(LLMAPIConfig llmApiConfig) {
+        this.llmApiConfig = llmApiConfig;
     }
 
     private static PracticeSession getDefaultSession() {

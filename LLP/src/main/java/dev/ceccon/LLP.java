@@ -35,6 +35,11 @@ public class LLP {
             apiConfig.setPort(port.toString());
         }
 
+        if (llpArgs.hasModel()) {
+            String model = llpArgs.getModel();
+            apiConfig.setModel(model);
+        }
+
     }
 
     static class LLPArgs {
@@ -46,12 +51,29 @@ public class LLP {
         )
         private Integer port;
 
+        @Parameter(
+                names = {"-m", "--model"},
+                description = "LLM server model",
+                required = false,
+                arity = 1
+        )
+        private String model;
+
         public Integer getPort() {
             return port;
+        }
+
+        public String getModel() {
+            return model;
         }
 
         public boolean hasPort() {
             return port != null;
         }
+
+        public boolean hasModel() {
+            return model != null;
+        }
+
     }
 }

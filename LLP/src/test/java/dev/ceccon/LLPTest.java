@@ -64,4 +64,13 @@ public class LLPTest {
         assertEquals(model, modelOnApi);
     }
 
+    @Test
+    void cliOptionInexistentThrowsException() {
+        String[] args = new String[]{"-thisisnotanoption"};
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            LLP.parseArguments(args, new LLMAPIConfig());
+        });
+    }
+
 }

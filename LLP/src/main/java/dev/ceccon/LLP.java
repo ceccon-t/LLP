@@ -4,7 +4,6 @@ import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 import dev.ceccon.config.LLMAPIConfig;
-import dev.ceccon.conversation.Chat;
 import dev.ceccon.gui.MainView;
 
 import javax.swing.*;
@@ -40,6 +39,11 @@ public class LLP {
             apiConfig.setModel(model);
         }
 
+        if (llpArgs.hasTemperature()) {
+            Double temperature = llpArgs.getTemperature();
+            apiConfig.setTemperature(temperature);
+        }
+
     }
 
     static class LLPArgs {
@@ -59,6 +63,14 @@ public class LLP {
         )
         private String model;
 
+        @Parameter(
+                names = {"-t", "--temperature"},
+                description = "Temperature value to use when generating answers.",
+                required = false,
+                arity = 1
+        )
+        private Double temperature;
+
         public Integer getPort() {
             return port;
         }
@@ -67,12 +79,20 @@ public class LLP {
             return model;
         }
 
+        public Double getTemperature() {
+            return temperature;
+        }
+
         public boolean hasPort() {
             return port != null;
         }
 
         public boolean hasModel() {
             return model != null;
+        }
+
+        public boolean hasTemperature() {
+            return temperature != null;
         }
 
     }

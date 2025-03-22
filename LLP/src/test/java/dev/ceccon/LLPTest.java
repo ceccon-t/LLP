@@ -59,9 +59,56 @@ public class LLPTest {
 
         LLP.parseArguments(args, apiConfig);
 
-        String modelOnApi = apiConfig.getModel();
+        String modelOnApiConfig = apiConfig.getModel();
 
-        assertEquals(model, modelOnApi);
+        assertEquals(model, modelOnApiConfig);
+    }
+
+    @Test
+    void cliOptionTemperatureWithoutValueThrowsException() {
+        String[] args = new String[]{"-t"};
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            LLP.parseArguments(args, new LLMAPIConfig());
+        });
+    }
+
+    @Test
+    void cliOptionTemperatureWithNonNumericValueThrowsException() {
+        String temperature = "temperature";
+        String[] args = new String[]{"-t", temperature};
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            LLP.parseArguments(args, new LLMAPIConfig());
+        });
+    }
+
+    @Test
+    void cliOptionTemperatureWithWholeNumberSetsTemperatureOnApiConfig() {
+        String temperature = "5";
+        String[] args = new String[]{"-t", temperature};
+
+        LLMAPIConfig apiConfig = new LLMAPIConfig();
+
+        LLP.parseArguments(args, apiConfig);
+
+        double temperatureOnApiConfig = apiConfig.getTemperature();
+
+        assertEquals(Double.valueOf(temperature), temperatureOnApiConfig);
+    }
+
+    @Test
+    void cliOptionTemperatureWithDecimalNumberSetsTemperatureOnApiConfig() {
+        String temperature = "0.3";
+        String[] args = new String[]{"-t", temperature};
+
+        LLMAPIConfig apiConfig = new LLMAPIConfig();
+
+        LLP.parseArguments(args, apiConfig);
+
+        double temperatureOnApiConfig = apiConfig.getTemperature();
+
+        assertEquals(Double.valueOf(temperature), temperatureOnApiConfig);
     }
 
     @Test

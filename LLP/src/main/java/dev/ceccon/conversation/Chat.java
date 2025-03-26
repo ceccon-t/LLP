@@ -15,6 +15,10 @@ public class Chat {
         messages.add(message);
     }
 
+    public void addMessage(String role, String content) {
+        messages.add(new Message(role, content));
+    }
+
     public void removeLast() {
         messages.removeLast();
     }

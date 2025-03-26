@@ -30,6 +30,21 @@ class ChatTest {
     }
 
     @Test
+    void addMessageToChatWithRoleAndContent() {
+        String role = "a";
+        String content = "b";
+
+        Chat chat = new Chat();
+        chat.addMessage(role, content);
+
+        List<Message> messages = chat.getMessages();
+        Message messageOnChat = messages.get(0);
+
+        assertEquals(role, messageOnChat.role());
+        assertEquals(content, messageOnChat.content());
+    }
+
+    @Test
     void addMessageToEndOfChat() {
         Message firstMessage = new Message("system", "First message");
         Message secondMessage = new Message("user", "Second message");

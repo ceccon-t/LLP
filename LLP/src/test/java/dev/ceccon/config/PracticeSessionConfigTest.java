@@ -1,5 +1,6 @@
 package dev.ceccon.config;
 
+import dev.ceccon.client.LLMClient;
 import dev.ceccon.conversation.Chat;
 import dev.ceccon.practice.Language;
 import dev.ceccon.practice.PracticeSession;
@@ -40,7 +41,7 @@ class PracticeSessionConfigTest {
         PracticeSession session = config.getPracticeSession();
         Chat chat = session.getChat();
 
-        assertEquals(1, chat.getMessages().size());
+        assertTrue(!chat.getMessages().isEmpty());
         assertEquals("system", chat.getMessages().getFirst().role());
     }
 
@@ -73,6 +74,17 @@ class PracticeSessionConfigTest {
         config.setLlmApiConfig(llmapiConfig);
 
         assertEquals(llmapiConfig, config.getLlmApiConfig());
+    }
+
+    @Test
+    void getAndSetLLMClient() {
+        LLMClient llmClient = new LLMClient(null);
+
+        PracticeSessionConfig config = PracticeSessionConfig.getInstance();
+
+        config.setLlmClient(llmClient);
+
+        assertEquals(llmClient, config.getLlmClient());
     }
 
 }

@@ -1,5 +1,6 @@
 package dev.ceccon.config;
 
+import dev.ceccon.client.LLMClient;
 import dev.ceccon.client.LLMSanitizer;
 import dev.ceccon.conversation.Chat;
 import dev.ceccon.conversation.Message;
@@ -21,6 +22,7 @@ public class PracticeSessionConfig {
     private Language practicedLanguage = Language.FRENCH;
     private PracticeSession practiceSession;
     private LLMAPIConfig llmApiConfig = new LLMAPIConfig();
+    private LLMClient llmClient = new LLMClient(llmApiConfig);
 
     private PracticeSessionConfig() {}
 
@@ -56,6 +58,15 @@ public class PracticeSessionConfig {
 
     public void setLlmApiConfig(LLMAPIConfig llmApiConfig) {
         this.llmApiConfig = llmApiConfig;
+        this.llmClient = new LLMClient(llmApiConfig);
+    }
+
+    public LLMClient getLlmClient() {
+        return llmClient;
+    }
+
+    public void setLlmClient(LLMClient llmClient) {
+        this.llmClient = llmClient;
     }
 
     private static PracticeSession getDefaultSession() {

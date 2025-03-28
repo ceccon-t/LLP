@@ -4,6 +4,7 @@ import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 import dev.ceccon.config.LLMAPIConfig;
+import dev.ceccon.config.PracticeSessionConfig;
 import dev.ceccon.gui.MainView;
 
 import javax.swing.*;
@@ -11,6 +12,12 @@ import javax.swing.*;
 public class LLP {
     public static void main( String[] args ) {
         System.out.println( "Launching LLP - Local Language Practice application." );
+
+        LLMAPIConfig llmapiConfig = new LLMAPIConfig();
+        parseArguments(args, llmapiConfig);
+
+        PracticeSessionConfig sessionConfig = PracticeSessionConfig.getInstance();
+        sessionConfig.setLlmApiConfig(llmapiConfig);
 
         SwingUtilities.invokeLater(() -> {
             new MainView();

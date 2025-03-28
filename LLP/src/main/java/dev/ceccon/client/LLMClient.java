@@ -52,7 +52,7 @@ public class LLMClient {
 
         llmConnection.close();
 
-        Message response = new Message(DEFAULT_BOT_ROLE, rawResponse);
+        Message response = new Message(DEFAULT_BOT_ROLE, LLMSanitizer.sanitizeForChat(rawResponse));
         return response;
     }
 }

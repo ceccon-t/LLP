@@ -7,6 +7,7 @@ import dev.ceccon.conversation.Message;
 import dev.ceccon.practice.PracticeSession;
 
 import javax.swing.*;
+import java.util.concurrent.CompletableFuture;
 
 public class ChatView extends JPanel {
     private static final String CHAT_VIEW_PREFIX = "==========\n- Scenario:\n";
@@ -36,7 +37,7 @@ public class ChatView extends JPanel {
 
         btnSendMessage = new JButton("Send");
         btnSendMessage.addActionListener(c -> {
-            sendMessage();
+            CompletableFuture.runAsync(() -> sendMessage());
         });
 
         add(spChat);
@@ -65,5 +66,24 @@ public class ChatView extends JPanel {
         chat.addMessage(new Message("user", LLMSanitizer.sanitizeForChat(userMessage)));
 
         taNextMessage.setText("");
+
+        setupAiAnswerOnChatView();
+        ConversationService.getNextAiMessage(sessionConfig, this::addTokenToChatView);
+        wrapUpAiAnswerOnChatView();
+    }
+
+    private void setupAiAnswerOnChatView() {
+        PracticeSession session = sessionConfig.getPracticeSession();
+        String aiCharacterName = session.getAiCharacter().getName();
+
+        taChat.append("\n----\n- " + aiCharacterName + ": ");
+    }
+
+    private void addTokenToChatView(String token) {
+        taChat.append(token);
+    }
+
+    private void wrapUpAiAnswerOnChatView() {
+        taChat.append("\n");
     }
 }

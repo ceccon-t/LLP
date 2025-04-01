@@ -66,6 +66,17 @@ class PracticeSessionConfigTest {
     }
 
     @Test
+    void canonLanguageIsEnglish() {
+        Language canonLanguage = Language.ENGLISH;
+
+        PracticeSessionConfig config = PracticeSessionConfig.getInstance();
+
+        Language canonOnConfig = config.getCanonLanguage();
+
+        assertEquals(canonLanguage, canonOnConfig);
+    }
+
+    @Test
     void getAndSetAPIConfig() {
         LLMAPIConfig llmapiConfig = new LLMAPIConfig();
 

@@ -69,6 +69,10 @@ public class PracticeSessionConfig {
         this.llmClient = llmClient;
     }
 
+    public Language getCanonLanguage() {
+        return Language.ENGLISH;
+    }
+
     private static PracticeSession getDefaultSession() {
         PracticeScene defaultScene = loadDefaultScene();
 

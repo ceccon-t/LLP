@@ -2,9 +2,11 @@ package dev.ceccon.gui.views.translation;
 
 import dev.ceccon.config.PracticeSessionConfig;
 import dev.ceccon.gui.ViewConfig;
+import dev.ceccon.translation.TranslationService;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.concurrent.CompletableFuture;
 
 public class TranslationWidget extends JPanel {
 
@@ -17,6 +19,8 @@ public class TranslationWidget extends JPanel {
     private String sourceLanguage;
     private String targetLanguage;
 
+    JTextArea taInput;
+    JTextArea taOutput;
     private JButton translateButton;
 
     public TranslationWidget(TranslationDirection direction) {
@@ -30,14 +34,14 @@ public class TranslationWidget extends JPanel {
 
         JPanel panel = new JPanel();
 
-        JTextArea taInput = new JTextArea(WIDGET_ROWS, WIDGET_COLUMNS);
+        taInput = new JTextArea(WIDGET_ROWS, WIDGET_COLUMNS);
         taInput.setLineWrap(true);
         taInput.setWrapStyleWord(true);
         JScrollPane spInput = new JScrollPane(taInput);
 
         translateButton = new JButton(sourceLanguage + " -> " + targetLanguage);
 
-        JTextArea taOutput = new JTextArea(WIDGET_ROWS, WIDGET_COLUMNS);
+        taOutput = new JTextArea(WIDGET_ROWS, WIDGET_COLUMNS);
         taOutput.setLineWrap(true);
         taOutput.setWrapStyleWord(true);
         taOutput.setEditable(false);
@@ -51,6 +55,10 @@ public class TranslationWidget extends JPanel {
         panel.setMaximumSize(new Dimension(ViewConfig.ROOT_WIDTH, MINIMUM_HEIGHT_SIZE));
 
         add(panel);
+
+        translateButton.addActionListener(l -> {
+            CompletableFuture.runAsync(this::translateSegment);
+        });
     }
 
     private void configureLanguages() {
@@ -61,6 +69,27 @@ public class TranslationWidget extends JPanel {
             sourceLanguage = sessionConfig.getPracticedLanguage().toString();
             targetLanguage = sessionConfig.getCanonLanguage().toString();
         }
+    }
+
+    private void translateSegment() {
+        String textToTranslate = taInput.getText();
+
+        onTranslationStart();
+        TranslationService.translate(sourceLanguage, targetLanguage, textToTranslate, this::onNewTranslationToken, sessionConfig);
+        onTranslationEnd();
+    }
+
+    private void onTranslationStart() {
+        taOutput.setText("");
+        translateButton.setEnabled(false);
+    }
+
+    private void onNewTranslationToken(String token) {
+        taOutput.append(token);
+    }
+
+    private void onTranslationEnd() {
+        translateButton.setEnabled(true);
     }
 
 }

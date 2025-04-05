@@ -1,9 +1,7 @@
-package dev.ceccon.gui.views.conversation;
+package dev.ceccon.conversation;
 
 import dev.ceccon.client.LLMClient;
 import dev.ceccon.config.PracticeSessionConfig;
-import dev.ceccon.conversation.Chat;
-import dev.ceccon.conversation.Message;
 import dev.ceccon.practice.PracticeSession;
 
 import java.io.IOException;

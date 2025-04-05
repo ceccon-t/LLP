@@ -3,6 +3,7 @@ package dev.ceccon.gui.views.conversation;
 import dev.ceccon.client.LLMSanitizer;
 import dev.ceccon.config.PracticeSessionConfig;
 import dev.ceccon.conversation.Chat;
+import dev.ceccon.conversation.ConversationService;
 import dev.ceccon.conversation.Message;
 import dev.ceccon.practice.PracticeSession;
 

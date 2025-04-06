@@ -2,6 +2,7 @@ package dev.ceccon.config;
 
 import dev.ceccon.client.LLMClient;
 import dev.ceccon.conversation.Chat;
+import dev.ceccon.conversation.Message;
 import dev.ceccon.practice.Language;
 import dev.ceccon.practice.PracticeSession;
 import org.junit.jupiter.api.Test;
@@ -53,19 +54,6 @@ class PracticeSessionConfigTest {
     }
 
     @Test
-    void getAndSetPracticedLanguage() {
-        Language practicedLanguage = Language.GERMAN;
-
-        PracticeSessionConfig config = PracticeSessionConfig.getInstance();
-
-        config.setPracticedLanguage(practicedLanguage);
-
-        Language languageOnConfig = config.getPracticedLanguage();
-
-        assertEquals(practicedLanguage, languageOnConfig);
-    }
-
-    @Test
     void canonLanguageIsEnglish() {
         Language canonLanguage = Language.ENGLISH;
 
@@ -96,6 +84,40 @@ class PracticeSessionConfigTest {
         config.setLlmClient(llmClient);
 
         assertEquals(llmClient, config.getLlmClient());
+    }
+
+    @Test
+    void setPracticedLanguageChangesPracticedLanguage() {
+        Language newLanguage = Language.SPANISH;
+
+        PracticeSessionConfig config = PracticeSessionConfig.getInstance();
+
+        Language defaultLanguage = config.getPracticedLanguage();
+        assertNotEquals(newLanguage, defaultLanguage,
+                "New language should be different from default for test to be meaningful.");
+
+        config.setPracticedLanguage(newLanguage);
+
+        Language practicedLanguage = config.getPracticedLanguage();
+
+        assertEquals(newLanguage, practicedLanguage);
+    }
+
+    @Test
+    void setPracticedLanguageRestartsChat() {
+        Language newLanguage = Language.GERMAN;
+
+        PracticeSessionConfig config = PracticeSessionConfig.getInstance();
+        Chat initialChat = config.getPracticeSession().getChat();
+        initialChat.addMessage(new Message("user", "a"));
+        initialChat.addMessage(new Message("assistant", "b"));
+
+        config.setPracticedLanguage(newLanguage);
+
+        Chat newChat = config.getPracticeSession().getChat();
+
+        assertEquals(1, newChat.getMessages().size());
+        assertEquals("system", newChat.getMessages().getFirst().role());
     }
 
 }

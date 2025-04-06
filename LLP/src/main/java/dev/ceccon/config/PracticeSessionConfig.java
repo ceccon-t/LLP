@@ -29,8 +29,7 @@ public class PracticeSessionConfig {
     public static PracticeSessionConfig getInstance() {
         synchronized (instanceLock) {
             if (instance == null) {
-                instance = new PracticeSessionConfig();
-                instance.practiceSession = getDefaultSession();
+                instance = initializeInstance();
             }
         }
         return instance;
@@ -42,6 +41,7 @@ public class PracticeSessionConfig {
 
     public void setPracticedLanguage(Language language) {
         practicedLanguage = language;
+        setupPracticeFor(language);
     }
 
     public PracticeSession getPracticeSession() {
@@ -73,6 +73,26 @@ public class PracticeSessionConfig {
         return Language.ENGLISH;
     }
 
+    private void setupPracticeFor(Language language) {
+        this.practicedLanguage = language;
+
+        String systemPrompt = getSystemPrompt(language, practiceSession.getAiCharacter(),
+                practiceSession.getHumanCharacter(), practiceSession.getScenario());
+
+        Chat newChat = new Chat();
+        newChat.addMessage(new Message("system", systemPrompt));
+
+        practiceSession.setChat(newChat);
+    }
+
+    private static PracticeSessionConfig initializeInstance() {
+        PracticeSessionConfig newInstance = new PracticeSessionConfig();
+        newInstance.practiceSession = getDefaultSession();
+        newInstance.setupPracticeFor(Language.FRENCH);
+
+        return newInstance;
+    }
+
     private static PracticeSession getDefaultSession() {
         PracticeScene defaultScene = loadDefaultScene();
 
@@ -101,13 +121,7 @@ public class PracticeSessionConfig {
 
         Language defaultLanguage = Language.FRENCH;
 
-        String systemPrompt = new StringBuilder()
-                .append("This is a conversation between ").append(LLMSanitizer.sanitizeForChat(aiCharacter.getName()))
-                .append(" and ").append(LLMSanitizer.sanitizeForChat(humanCharacter.getName()))
-                .append(", for the purpose of practicing the ").append(defaultLanguage).append(" language.\n")
-                .append("The scenario is as follows: \n\n<scenario>\n").append(LLMSanitizer.sanitizeForChat(scenario)).append("\n</scenario>\n\n")
-                .append("The conversation should work as a normal roleplaying chat, but all content should be in ").append(defaultLanguage).append(".\n")
-                .toString();
+        String systemPrompt = getSystemPrompt(defaultLanguage, aiCharacter, humanCharacter, scenario);
 
         Chat chat = new Chat();
         chat.addMessage(new Message("system", systemPrompt));
@@ -122,5 +136,15 @@ public class PracticeSessionConfig {
             System.out.println("Could not load default scene.");
             throw new RuntimeException(e);
         }
+    }
+
+    private static String getSystemPrompt(Language language, PracticeCharacter aiCharacter, PracticeCharacter humanCharacter, String scenario) {
+        return new StringBuilder()
+                .append("This is a conversation between ").append(LLMSanitizer.sanitizeForChat(aiCharacter.getName()))
+                .append(" and ").append(LLMSanitizer.sanitizeForChat(humanCharacter.getName()))
+                .append(", for the purpose of practicing the ").append(language.toString()).append(" language.\n")
+                .append("The scenario is as follows: \n\n<scenario>\n").append(LLMSanitizer.sanitizeForChat(scenario)).append("\n</scenario>\n\n")
+                .append("The conversation should work as a normal roleplaying chat, but all content should be in ").append(language.toString()).append(".\n")
+                .toString();
     }
 }

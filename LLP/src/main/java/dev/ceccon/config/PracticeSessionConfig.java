@@ -13,6 +13,8 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
+import java.util.LinkedList;
+import java.util.List;
 
 public class PracticeSessionConfig {
 
@@ -23,6 +25,8 @@ public class PracticeSessionConfig {
     private PracticeSession practiceSession;
     private LLMAPIConfig llmApiConfig = new LLMAPIConfig();
     private LLMClient llmClient = new LLMClient(llmApiConfig);
+
+    private List<PracticedLanguageChangedObserver> practicedLanguageChangedObservers = new LinkedList<>();
 
     private PracticeSessionConfig() {}
 
@@ -42,6 +46,9 @@ public class PracticeSessionConfig {
     public void setPracticedLanguage(Language language) {
         practicedLanguage = language;
         setupPracticeFor(language);
+
+        practicedLanguageChangedObservers
+                .forEach(o -> o.languageChanged(language));
     }
 
     public PracticeSession getPracticeSession() {
@@ -71,6 +78,10 @@ public class PracticeSessionConfig {
 
     public Language getCanonLanguage() {
         return Language.ENGLISH;
+    }
+
+    public void addPracticedLanguageChangedObserver(PracticedLanguageChangedObserver observer) {
+        this.practicedLanguageChangedObservers.add(observer);
     }
 
     private void setupPracticeFor(Language language) {

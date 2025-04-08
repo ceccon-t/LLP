@@ -6,6 +6,7 @@ import dev.ceccon.conversation.Message;
 import dev.ceccon.practice.Language;
 import dev.ceccon.practice.PracticeSession;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -118,6 +119,20 @@ class PracticeSessionConfigTest {
 
         assertEquals(1, newChat.getMessages().size());
         assertEquals("system", newChat.getMessages().getFirst().role());
+    }
+
+    @Test
+    void setPracticedLanguageNotifiesObserversOfLanguageChanged() {
+        Language newLanguage = Language.GERMAN;
+        PracticedLanguageChangedObserver observer = Mockito.mock(PracticedLanguageChangedObserver.class);
+
+        PracticeSessionConfig config = PracticeSessionConfig.getInstance();
+        config.addPracticedLanguageChangedObserver(observer);
+
+        config.setPracticedLanguage(newLanguage);
+
+        Mockito.verify(observer).languageChanged(newLanguage);
+
     }
 
 }

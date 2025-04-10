@@ -1,5 +1,6 @@
 package dev.ceccon.gui.views;
 
+import dev.ceccon.config.PracticeSessionConfig;
 import dev.ceccon.gui.ViewConfig;
 
 import javax.swing.*;
@@ -25,7 +26,8 @@ public class ControlView extends JPanel{
 
     private void initializeComponentsBehavior() {
         resetSceneBtn.addActionListener(c -> {
-            System.out.println("TODO: Implement scene reset");
+            PracticeSessionConfig sessionConfig = PracticeSessionConfig.getInstance();
+            sessionConfig.reset();
         });
     }
 }

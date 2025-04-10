@@ -2,15 +2,17 @@ package dev.ceccon.gui.views.conversation;
 
 import dev.ceccon.client.LLMSanitizer;
 import dev.ceccon.config.PracticeSessionConfig;
+import dev.ceccon.config.PracticedLanguageChangedObserver;
 import dev.ceccon.conversation.Chat;
 import dev.ceccon.conversation.ConversationService;
 import dev.ceccon.conversation.Message;
+import dev.ceccon.practice.Language;
 import dev.ceccon.practice.PracticeSession;
 
 import javax.swing.*;
 import java.util.concurrent.CompletableFuture;
 
-public class ChatView extends JPanel {
+public class ChatView extends JPanel implements PracticedLanguageChangedObserver {
     private static final String CHAT_VIEW_PREFIX = "==========\n- Scenario:\n";
 
     PracticeSessionConfig sessionConfig;
@@ -45,6 +47,7 @@ public class ChatView extends JPanel {
         add(spNextMessage);
         add(btnSendMessage);
 
+        sessionConfig.addPracticedLanguageChangedObserver(this);
     }
 
     private void initializeChatViewContent() {
@@ -86,5 +89,10 @@ public class ChatView extends JPanel {
 
     private void wrapUpAiAnswerOnChatView() {
         taChat.append("\n");
+    }
+
+    @Override
+    public void languageChanged(Language newLanguage) {
+        initializeChatViewContent();
     }
 }

@@ -81,7 +81,7 @@ public class PracticeSessionConfig {
     }
 
     public void reset() {
-        setupPracticeFor(practicedLanguage);
+        setPracticedLanguage(practicedLanguage);
     }
 
     public void addPracticedLanguageChangedObserver(PracticedLanguageChangedObserver observer) {

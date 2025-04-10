@@ -132,7 +132,21 @@ class PracticeSessionConfigTest {
         config.setPracticedLanguage(newLanguage);
 
         Mockito.verify(observer).languageChanged(newLanguage);
+    }
 
+    @Test
+    void resetRestartsChat() {
+        PracticeSessionConfig config = PracticeSessionConfig.getInstance();
+        Chat initialChat = config.getPracticeSession().getChat();
+        initialChat.addMessage(new Message("user", "a"));
+        initialChat.addMessage(new Message("assistant", "b"));
+
+        config.reset();
+
+        Chat newChat = config.getPracticeSession().getChat();
+
+        assertEquals(1, newChat.getMessages().size());
+        assertEquals("system", newChat.getMessages().getFirst().role());
     }
 
 }

@@ -80,6 +80,10 @@ public class PracticeSessionConfig {
         return Language.ENGLISH;
     }
 
+    public void reset() {
+        setupPracticeFor(practicedLanguage);
+    }
+
     public void addPracticedLanguageChangedObserver(PracticedLanguageChangedObserver observer) {
         this.practicedLanguageChangedObservers.add(observer);
     }

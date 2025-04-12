@@ -1,14 +1,16 @@
 package dev.ceccon.gui.views.translation;
 
 import dev.ceccon.config.PracticeSessionConfig;
+import dev.ceccon.config.PracticedLanguageChangedObserver;
 import dev.ceccon.gui.ViewConfig;
+import dev.ceccon.practice.Language;
 import dev.ceccon.translation.TranslationService;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.concurrent.CompletableFuture;
 
-public class TranslationWidget extends JPanel {
+public class TranslationWidget extends JPanel implements PracticedLanguageChangedObserver {
 
     private static final Integer WIDGET_ROWS = 5;
     private static final Integer WIDGET_COLUMNS = 30;
@@ -28,8 +30,6 @@ public class TranslationWidget extends JPanel {
 
         sessionConfig = PracticeSessionConfig.getInstance();
 
-        configureLanguages();
-
         setLayout(new FlowLayout());
 
         JPanel panel = new JPanel();
@@ -39,13 +39,14 @@ public class TranslationWidget extends JPanel {
         taInput.setWrapStyleWord(true);
         JScrollPane spInput = new JScrollPane(taInput);
 
-        translateButton = new JButton(sourceLanguage + " -> " + targetLanguage);
-
         taOutput = new JTextArea(WIDGET_ROWS, WIDGET_COLUMNS);
         taOutput.setLineWrap(true);
         taOutput.setWrapStyleWord(true);
         taOutput.setEditable(false);
         JScrollPane spOutput = new JScrollPane(taOutput);
+
+        translateButton = new JButton();
+        configureLanguages();
 
         panel.add(spInput);
         panel.add(translateButton);
@@ -59,6 +60,8 @@ public class TranslationWidget extends JPanel {
         translateButton.addActionListener(l -> {
             CompletableFuture.runAsync(this::translateSegment);
         });
+
+        sessionConfig.addPracticedLanguageChangedObserver(this);
     }
 
     private void configureLanguages() {
@@ -69,6 +72,9 @@ public class TranslationWidget extends JPanel {
             sourceLanguage = sessionConfig.getPracticedLanguage().toString();
             targetLanguage = sessionConfig.getCanonLanguage().toString();
         }
+        translateButton.setText(sourceLanguage + " -> " + targetLanguage);
+        taInput.setText("");
+        taOutput.setText("");
     }
 
     private void translateSegment() {
@@ -92,4 +98,8 @@ public class TranslationWidget extends JPanel {
         translateButton.setEnabled(true);
     }
 
+    @Override
+    public void languageChanged(Language newLanguage) {
+        configureLanguages();
+    }
 }

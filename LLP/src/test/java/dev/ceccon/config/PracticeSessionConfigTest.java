@@ -4,9 +4,13 @@ import dev.ceccon.client.LLMClient;
 import dev.ceccon.conversation.Chat;
 import dev.ceccon.conversation.Message;
 import dev.ceccon.practice.Language;
+import dev.ceccon.practice.PracticeScene;
 import dev.ceccon.practice.PracticeSession;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+
+import java.io.File;
+import java.net.URISyntaxException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -85,6 +89,16 @@ class PracticeSessionConfigTest {
         config.setLlmClient(llmClient);
 
         assertEquals(llmClient, config.getLlmClient());
+    }
+
+    @Test
+    void getAndSetPracticeScene() throws URISyntaxException {
+        PracticeScene scene = PracticeScene.fromFile(new File(PracticeSessionConfigTest.class.getClassLoader().getResource("scenes/default.practice").toURI()));
+
+        PracticeSessionConfig config = PracticeSessionConfig.getInstance();
+        config.setPracticeScene(scene);
+
+        assertEquals(scene, config.getPracticeScene());
     }
 
     @Test

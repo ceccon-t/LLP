@@ -12,6 +12,7 @@ import dev.ceccon.practice.PracticeSession;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.util.LinkedList;
 import java.util.List;
@@ -22,6 +23,7 @@ public class PracticeSessionConfig {
     private static final Object instanceLock = new Object();
 
     private Language practicedLanguage = Language.FRENCH;
+    private PracticeScene practiceScene;
     private PracticeSession practiceSession;
     private LLMAPIConfig llmApiConfig = new LLMAPIConfig();
     private LLMClient llmClient = new LLMClient(llmApiConfig);
@@ -37,6 +39,16 @@ public class PracticeSessionConfig {
             }
         }
         return instance;
+    }
+
+    public PracticeScene getPracticeScene() {
+        return practiceScene;
+    }
+
+    public void setPracticeScene(PracticeScene practiceScene) {
+        this.practiceScene = practiceScene;
+        setPracticeSession(sessionFromScene(practiceScene));
+        setupPracticeFor(practicedLanguage);
     }
 
     public Language getPracticedLanguage() {
@@ -102,10 +114,24 @@ public class PracticeSessionConfig {
 
     private static PracticeSessionConfig initializeInstance() {
         PracticeSessionConfig newInstance = new PracticeSessionConfig();
-        newInstance.practiceSession = getDefaultSession();
+        newInstance.practiceScene = loadDefaultScene();
+        newInstance.practiceSession = getDefaultSession(newInstance.practiceScene);
         newInstance.setupPracticeFor(Language.FRENCH);
 
         return newInstance;
+    }
+
+    private static File getFile(String path) throws URISyntaxException {
+        File file;
+
+        URL resourceUrl = PracticeSessionConfig.class.getClassLoader().getResource(path);
+        if (resourceUrl != null) {
+            file = new File(resourceUrl.toURI());
+        } else {
+            file = new File(path);
+        }
+
+        return file;
     }
 
     private static PracticeSession sessionFromScene(PracticeScene scene) {
@@ -116,7 +142,7 @@ public class PracticeSessionConfig {
 
         byte[] aiCharacterImageBytes;
         try {
-            File aiCharacterImageFile = new File(PracticeSessionConfig.class.getClassLoader().getResource(aiCharacterImagePath).toURI());
+            File aiCharacterImageFile = getFile(aiCharacterImagePath);
             aiCharacterImageBytes = Files.readAllBytes(aiCharacterImageFile.toPath());
         } catch (URISyntaxException | IOException e) {
             System.out.println("Could not load AI character image. Path: " + aiCharacterImagePath);
@@ -125,7 +151,7 @@ public class PracticeSessionConfig {
 
         byte[] humanCharacterImageBytes;
         try {
-            File humanCharacterImageFile = new File(PracticeSessionConfig.class.getClassLoader().getResource(humanCharacterImagePath).toURI());
+            File humanCharacterImageFile = getFile(humanCharacterImagePath);
             humanCharacterImageBytes = Files.readAllBytes(humanCharacterImageFile.toPath());
         } catch (URISyntaxException | IOException e) {
             System.out.println("Could not load default human character image. Path: " + humanCharacterImagePath);
@@ -141,9 +167,7 @@ public class PracticeSessionConfig {
 
     }
 
-    private static PracticeSession getDefaultSession() {
-        PracticeScene defaultScene = loadDefaultScene();
-
+    private static PracticeSession getDefaultSession(PracticeScene defaultScene) {
         PracticeSession defaultSession = sessionFromScene(defaultScene);
 
         Language defaultLanguage = Language.FRENCH;

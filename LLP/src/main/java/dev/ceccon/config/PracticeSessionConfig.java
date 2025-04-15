@@ -108,40 +108,53 @@ public class PracticeSessionConfig {
         return newInstance;
     }
 
-    private static PracticeSession getDefaultSession() {
-        PracticeScene defaultScene = loadDefaultScene();
+    private static PracticeSession sessionFromScene(PracticeScene scene) {
 
-        String scenario = defaultScene.getScenario();
+        String scenario = scene.getScenario();
+        String aiCharacterImagePath = scene.getAiCharacterImagePath();
+        String humanCharacterImagePath = scene.getHumanCharacterImagePath();
 
         byte[] aiCharacterImageBytes;
         try {
-            File aiCharacterImageFile = new File(PracticeSessionConfig.class.getClassLoader().getResource(defaultScene.getAiCharacterImagePath()).toURI());
+            File aiCharacterImageFile = new File(PracticeSessionConfig.class.getClassLoader().getResource(aiCharacterImagePath).toURI());
             aiCharacterImageBytes = Files.readAllBytes(aiCharacterImageFile.toPath());
         } catch (URISyntaxException | IOException e) {
-            System.out.println("Could not load default AI character image.");
+            System.out.println("Could not load AI character image. Path: " + aiCharacterImagePath);
             throw new RuntimeException(e);
         }
 
         byte[] humanCharacterImageBytes;
         try {
-            File humanCharacterImageFile = new File(PracticeSessionConfig.class.getClassLoader().getResource(defaultScene.getHumanCharacterImagePath()).toURI());
+            File humanCharacterImageFile = new File(PracticeSessionConfig.class.getClassLoader().getResource(humanCharacterImagePath).toURI());
             humanCharacterImageBytes = Files.readAllBytes(humanCharacterImageFile.toPath());
         } catch (URISyntaxException | IOException e) {
-            System.out.println("Could not load default human character image.");
+            System.out.println("Could not load default human character image. Path: " + humanCharacterImagePath);
             throw new RuntimeException(e);
         }
 
-        PracticeCharacter aiCharacter = new PracticeCharacter(defaultScene.getAiCharacterName(), defaultScene.getAiCharacterBio(), aiCharacterImageBytes);
-        PracticeCharacter humanCharacter = new PracticeCharacter(defaultScene.getHumanCharacterName(), defaultScene.getHumanCharacterBio(), humanCharacterImageBytes);
+        PracticeCharacter aiCharacter = new PracticeCharacter(scene.getAiCharacterName(), scene.getAiCharacterBio(), aiCharacterImageBytes);
+        PracticeCharacter humanCharacter = new PracticeCharacter(scene.getHumanCharacterName(), scene.getHumanCharacterBio(), humanCharacterImageBytes);
+
+        Chat chat = new Chat();
+
+        return new PracticeSession(scenario, aiCharacter, humanCharacter, chat);
+
+    }
+
+    private static PracticeSession getDefaultSession() {
+        PracticeScene defaultScene = loadDefaultScene();
+
+        PracticeSession defaultSession = sessionFromScene(defaultScene);
 
         Language defaultLanguage = Language.FRENCH;
 
-        String systemPrompt = getSystemPrompt(defaultLanguage, aiCharacter, humanCharacter, scenario);
+        String systemPrompt = getSystemPrompt(defaultLanguage, defaultSession.getAiCharacter(), defaultSession.getHumanCharacter(), defaultSession.getScenario());
 
         Chat chat = new Chat();
         chat.addMessage(new Message("system", systemPrompt));
+        defaultSession.setChat(chat);
 
-        return new PracticeSession(scenario, aiCharacter, humanCharacter, chat);
+        return defaultSession;
     }
 
     private static PracticeScene loadDefaultScene() {

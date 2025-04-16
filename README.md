@@ -4,7 +4,7 @@
 
 ## Description
 
-Desktop application to practice languages through chatting with a local LLM.
+Local Language Practice (LLP) is a desktop application to practice languages through chatting with a local LLM.
 
 ![Start of a practice session](https://raw.githubusercontent.com/ceccon-t/LLP/main/images/LLP_v1-0-0_sc0.png "Start of a practice session")
 

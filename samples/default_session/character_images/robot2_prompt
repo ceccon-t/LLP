@@ -1,0 +1,6 @@
+Prompt: drawing portrait, robot, friendly smile, turned to the right, cyberpunk metropolis on background, natural lighting, highly detailed, 8K
+
+Negative: (worst quality, low quality:1.4), logo, text, monochrome
+
+Parameters: Size: 1024x1024| Steps: 20| Seed: 4289371911| CFG scale: 6| Batch: 1x2| Model: FLUX.1-schnell| App: SD.Next| Version: c4ecee3| Backend: Diffusers| Pipeline: FluxPipeline| Parser: native| Operations: txt2img| Grid: 1x2
+

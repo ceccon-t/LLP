@@ -1,14 +1,16 @@
 package dev.ceccon.gui.views.conversation;
 
 import dev.ceccon.config.PracticeSessionConfig;
+import dev.ceccon.config.PracticedSceneChangedObserver;
 import dev.ceccon.practice.CharacterType;
 import dev.ceccon.practice.PracticeCharacter;
+import dev.ceccon.practice.PracticeScene;
 import dev.ceccon.practice.PracticeSession;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class CharacterView extends JPanel {
+public class CharacterView extends JPanel implements PracticedSceneChangedObserver {
 
     private static final int CHARACTER_VIEW_WIDTH = 384;
     private static final int CHARACTER_VIEW_HEIGHT = 500;
@@ -49,6 +51,9 @@ public class CharacterView extends JPanel {
         add(panelImage);
         add(panelDescription);
 
+        PracticeSessionConfig sessionConfig = PracticeSessionConfig.getInstance();
+        sessionConfig.addPracticedSceneChangedObserver(this);
+
     }
 
     private void populateImageViewsContents() {
@@ -78,5 +83,11 @@ public class CharacterView extends JPanel {
         return characterType == CharacterType.AI ?
                 practiceSession.getAiCharacter() :
                 practiceSession.getHumanCharacter();
+    }
+
+    @Override
+    public void sceneChanged(PracticeScene newScene) {
+        character = fetchCharacter();
+        populateViewsContent();
     }
 }

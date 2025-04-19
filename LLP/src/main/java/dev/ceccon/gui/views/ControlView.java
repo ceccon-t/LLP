@@ -23,6 +23,7 @@ public class ControlView extends JPanel{
         FlowLayout layout = new FlowLayout();
         setLayout(layout);
 
+        add(loadSceneBtn);
         add(resetSceneBtn);
 
         initializeComponentsBehavior();

@@ -29,6 +29,7 @@ public class PracticeSessionConfig {
     private LLMClient llmClient = new LLMClient(llmApiConfig);
 
     private List<PracticedLanguageChangedObserver> practicedLanguageChangedObservers = new LinkedList<>();
+    private List<PracticedSceneChangedObserver> practicedSceneChangedObservers = new LinkedList<>();
 
     private PracticeSessionConfig() {}
 
@@ -49,6 +50,8 @@ public class PracticeSessionConfig {
         this.practiceScene = practiceScene;
         setPracticeSession(sessionFromScene(practiceScene));
         setupPracticeFor(practicedLanguage);
+
+        practicedSceneChangedObservers.forEach(o -> o.sceneChanged(practiceScene));
     }
 
     public Language getPracticedLanguage() {
@@ -98,6 +101,10 @@ public class PracticeSessionConfig {
 
     public void addPracticedLanguageChangedObserver(PracticedLanguageChangedObserver observer) {
         this.practicedLanguageChangedObservers.add(observer);
+    }
+
+    public void addPracticedSceneChangedObserver(PracticedSceneChangedObserver observer) {
+        this.practicedSceneChangedObservers.add(observer);
     }
 
     private void setupPracticeFor(Language language) {

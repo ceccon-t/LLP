@@ -163,4 +163,16 @@ class PracticeSessionConfigTest {
         assertEquals("system", newChat.getMessages().getFirst().role());
     }
 
+    @Test
+    void setPracticeSceneNotifiesObserversOfSceneChanged() throws URISyntaxException {
+        PracticeScene newScene = PracticeScene.fromFile(new File(PracticeSessionConfigTest.class.getClassLoader().getResource("scenes/default.practice").toURI()));
+        PracticedSceneChangedObserver observer = Mockito.mock(PracticedSceneChangedObserver.class);
+        PracticeSessionConfig config = PracticeSessionConfig.getInstance();
+        config.addPracticedSceneChangedObserver(observer);
+
+        config.setPracticeScene(newScene);
+
+        Mockito.verify(observer).sceneChanged(newScene);
+    }
+
 }

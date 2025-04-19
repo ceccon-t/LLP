@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Sample file for practice scene
+- Load practice scene from file
 
 ### Changed
 

@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Sample file for practice scene
 - Load practice scene from file
+- architecture.md file
 
 ### Changed
 

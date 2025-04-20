@@ -2,11 +2,13 @@
 
 ![Build status](https://github.com/ceccon-t/LLP/actions/workflows/main-workflow.yml/badge.svg "Build status")
 
+
 ## Description
 
 Local Language Practice (LLP) is a desktop application to practice languages through chatting with a local LLM.
 
 ![Start of a practice session](https://raw.githubusercontent.com/ceccon-t/LLP/main/images/LLP_v1-0-0_sc0.png "Start of a practice session")
+
 
 ## How to use
 
@@ -24,6 +26,7 @@ You can change the language being practiced by selecting a different one from th
 The application assumes you have an LLM API listening on port 8080 of your computer (port number is configurable, check section below). If you have experience configuring and running them, any with an OpenAI-compatible API should work nicely - if you do not have experience, the easiest way to get one running is to use [llamafile](https://github.com/mozilla-Ocho/llamafile), which is both easy to use and has very good documentation on how to set it up.
 
 Don't like the results you have been getting? Just try another model! Llamafile's documentation explains how to use a single executable to run different models, the same should be true for any other tool you might choose.
+
 
 ## How to run
 
@@ -45,6 +48,7 @@ If you are using ollama for the LLM server, you will have to at a minimum pass t
 
 Keep in mind that ollama will use an incredibly small context size, regardless of the model you are using. In order to have a larger context size, you will need to create a custom version of the model, specifying the size to be used - this might be a somewhat more advanced configuration that you should try only after you feel comfortable with ollama. Please refer to its documentation for steps on how to set the context size for the model when using the OpenAI-like API (which LLP does).
 
+
 ## Command-line options
 
 Here is the list of command-line options available when starting the application:
@@ -56,6 +60,12 @@ Here is the list of command-line options available when starting the application
 - `-t <temperature>`: Specify the temperature to be used when generating text, the larger the temperature the more randomness it includes. <temperature> must be a decimal number, and usually fits in the [0.0-1.0) range. Make sure to use a dot (`.`) and not a comma to separate the parts of the number. Defaults to 0.9.
 
 These options are independent of each other, and can be combined as desired and in any order. Examples of using some of them can be found in section "How to run" of readme.
+
+
+## Changing the practice scene
+
+Although it is not possible to edit the practiced scene in the application itself, it is possible to load different scenes from a file in order to practice whichever scenario one wants. For this, you will need to create a `.practice` file in JSON format - you can use the file `samples/default_session/default.practice` as a reference for the required fields. Once you have created a custom `.practice` field with all the fields correctly filled, just import it through the respective button in the UI of the application.
+
 
 ## How to build the project
 

@@ -42,9 +42,9 @@ Example using a custom port (8888, in this case):
 
 ### Run with ollama
 
-If you are using ollama for the LLM server, you will have to at a minimum pass the name of the model you want to chat with when starting the application by using the `-m <model_name>` option. You will probably also want to use ollama's default port, 11434. Here is an example of how to chat with llama3.1 using ollama (check ollama's documentation for other model options):
+If you are using ollama for the LLM server, you will have to at a minimum pass the name of the model you want to chat with when starting the application by using the `-m <model_name>` option. You will probably also want to use ollama's default port, 11434. Here is an example of how to chat with a small version of gemma3 using ollama (check ollama's documentation for other model options):
 
-`$ java -jar LLP.jar -p 11434 -m llama3.1`
+`$ java -jar LLP.jar -p 11434 -m gemma3:4b`
 
 Keep in mind that ollama will use an incredibly small context size, regardless of the model you are using. In order to have a larger context size, you will need to create a custom version of the model, specifying the size to be used - this might be a somewhat more advanced configuration that you should try only after you feel comfortable with ollama. Please refer to its documentation for steps on how to set the context size for the model when using the OpenAI-like API (which LLP does).
 

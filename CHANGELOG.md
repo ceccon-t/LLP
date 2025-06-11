@@ -11,11 +11,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Use gemma3 instead of llama3.1 in usage example on Readme
+
 ### Deprecated
 
 ### Removed
 
 ### Fixed
+
+- Bug preventing starting the project from Jar, due to loading resource files incorrectly
+- Updated sanitizing class with more cases
 
 ### Security
 

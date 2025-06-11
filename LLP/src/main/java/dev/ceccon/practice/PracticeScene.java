@@ -1,9 +1,11 @@
 package dev.ceccon.practice;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -18,18 +20,29 @@ public class PracticeScene {
     private String humanCharacterImagePath;
 
     public static PracticeScene fromFile(File file) {
-        ObjectMapper mapper = new ObjectMapper();
-        PracticeScene loadedScene;
-
         try {
             String fileContent = Files.readString(Path.of(file.getPath()));
-            loadedScene = mapper.readValue(fileContent, PracticeScene.class);
+            return fromContents(fileContent);
         } catch (IOException e) {
             System.out.println("Could not load file, please check if file exists and follows expected format.");
             throw new RuntimeException(e);
         }
+    }
 
-        return loadedScene;
+    // Necessary to load from inside JAR
+    public static PracticeScene fromResource(String resourcePath) {
+        try {
+            String fileContent = new String(PracticeScene.class.getResourceAsStream(resourcePath).readAllBytes(), StandardCharsets.UTF_8);
+            return fromContents(fileContent);
+        } catch (IOException e) {
+            System.out.println("Could not load file, please check if file exists and follows expected format.");
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static PracticeScene fromContents(String contents) throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        return mapper.readValue(contents, PracticeScene.class);
     }
 
     public String getScenario() {

@@ -189,12 +189,7 @@ public class PracticeSessionConfig {
     }
 
     private static PracticeScene loadDefaultScene() {
-        try {
-            return PracticeScene.fromFile(new File(PracticeSessionConfig.class.getClassLoader().getResource("scenes/default.practice").toURI()));
-        } catch (URISyntaxException e) {
-            System.out.println("Could not load default scene.");
-            throw new RuntimeException(e);
-        }
+        return PracticeScene.fromResource("/scenes/default.practice");
     }
 
     private static String getSystemPrompt(Language language, PracticeCharacter aiCharacter, PracticeCharacter humanCharacter, String scenario) {

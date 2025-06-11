@@ -142,28 +142,12 @@ public class PracticeSessionConfig {
     }
 
     private static PracticeSession sessionFromScene(PracticeScene scene) {
-
         String scenario = scene.getScenario();
         String aiCharacterImagePath = scene.getAiCharacterImagePath();
         String humanCharacterImagePath = scene.getHumanCharacterImagePath();
 
-        byte[] aiCharacterImageBytes;
-        try {
-            File aiCharacterImageFile = getFile(aiCharacterImagePath);
-            aiCharacterImageBytes = Files.readAllBytes(aiCharacterImageFile.toPath());
-        } catch (URISyntaxException | IOException e) {
-            System.out.println("Could not load AI character image. Path: " + aiCharacterImagePath);
-            throw new RuntimeException(e);
-        }
-
-        byte[] humanCharacterImageBytes;
-        try {
-            File humanCharacterImageFile = getFile(humanCharacterImagePath);
-            humanCharacterImageBytes = Files.readAllBytes(humanCharacterImageFile.toPath());
-        } catch (URISyntaxException | IOException e) {
-            System.out.println("Could not load default human character image. Path: " + humanCharacterImagePath);
-            throw new RuntimeException(e);
-        }
+        byte[] aiCharacterImageBytes = getImageBytes(aiCharacterImagePath);
+        byte[] humanCharacterImageBytes = getImageBytes(humanCharacterImagePath);
 
         PracticeCharacter aiCharacter = new PracticeCharacter(scene.getAiCharacterName(), scene.getAiCharacterBio(), aiCharacterImageBytes);
         PracticeCharacter humanCharacter = new PracticeCharacter(scene.getHumanCharacterName(), scene.getHumanCharacterBio(), humanCharacterImageBytes);
@@ -172,6 +156,21 @@ public class PracticeSessionConfig {
 
         return new PracticeSession(scenario, aiCharacter, humanCharacter, chat);
 
+    }
+
+    private static byte[] getImageBytes(String path) {
+        try {
+            if (path.startsWith("RESOURCE:")) { // Loading file inside JAR, as resource
+                String actualPath = path.replace("RESOURCE:", "/");
+                return PracticeSessionConfig.class.getResourceAsStream(actualPath).readAllBytes();
+            } else { // Loading from filesystem
+                File imageFile = getFile(path);
+                return Files.readAllBytes(imageFile.toPath());
+            }
+        } catch (URISyntaxException | IOException e) {
+            System.out.println("Could not load image. Path: " + path);
+            throw new RuntimeException(e);
+        }
     }
 
     private static PracticeSession getDefaultSession(PracticeScene defaultScene) {

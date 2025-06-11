@@ -76,13 +76,17 @@ public class LLMSanitizer {
         sanitized = sanitized.replaceAll("Ç", "C");
 
         sanitized = sanitized.replaceAll("ß", "ss");
-
         sanitized = sanitized.replaceAll("¿", "");
         sanitized = sanitized.replaceAll("¡", "");
 
         sanitized = sanitized.replaceAll("–", "-");
+        sanitized = sanitized.replaceAll("—", "-");
+
+        sanitized = sanitized.replaceAll("’", "'");
+        sanitized = sanitized.replaceAll("‘", "'");
+        sanitized = sanitized.replaceAll("“", "\"");
+        sanitized = sanitized.replaceAll("”", "\"");
 
         return sanitized;
     }
-
 }
